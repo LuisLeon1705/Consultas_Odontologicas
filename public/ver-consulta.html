@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ver Consulta Odontológica - Sistema Odontológico</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/odontodiagrama.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar">
+        <div class="position-sticky">
+          <h2 class="text-white p-3">OTRASS</h2>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/">
+                <i class="bi bi-house-door me-2"></i>
+                Inicio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/personal">
+                <i class="bi bi-people me-2"></i>
+                Gestión de Personal
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/laboratorio">
+                <i class="bi bi-flask me-2"></i>
+                Laboratorio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/compras">
+                <i class="bi bi-cart me-2"></i>
+                Compras
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white fw-bold" href="/consultas-odontologicas">
+                <i class="bi bi-emoji-smile me-2"></i>
+                Consultas Odontológicas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/consultas-medicas">
+                <i class="bi bi-heart-pulse me-2"></i>
+                Consultas Médicas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/administracion">
+                <i class="bi bi-file-text me-2"></i>
+                Administración
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/hospitalizacion">
+                <i class="bi bi-hospital me-2"></i>
+                Hospitalización
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/mantenimiento">
+                <i class="bi bi-tools me-2"></i>
+                Mantenimiento
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/citas">
+                <i class="bi bi-calendar me-2"></i>
+                Gestión de Citas
+              </a>
+            </li>
+          </ul>
+          <div class="position-absolute bottom-0 mb-3">
+            <a class="nav-link text-white" href="/ayuda">
+              <i class="bi bi-question-circle me-2"></i>
+              Ayuda
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 id="page-title">Consulta Odontológica</h1>
+          <div>
+            <a href="/consultas-odontologicas" class="btn btn-outline-secondary me-2">
+              <i class="bi bi-arrow-left me-2"></i>
+              Volver
+            </a>
+            <a id="edit-link" href="#" class="btn btn-primary">
+              <i class="bi bi-pencil me-2"></i>
+              Editar
+            </a>
+          </div>
+        </div>
+
+        <div id="loading-indicator" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2">Cargando datos de la consulta...</p>
+        </div>
+
+        <div id="error-message" class="alert alert-danger d-none" role="alert">
+          Error al cargar la consulta. Por favor, inténtelo de nuevo.
+        </div>
+
+        <div id="consulta-container" class="d-none">
+          <!-- Información del paciente -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Información del Paciente</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>Nombre:</strong> <span id="paciente-nombre"></span></p>
+                  <p><strong>Cédula:</strong> <span id="paciente-cedula"></span></p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Fecha de Consulta:</strong> <span id="fecha-consulta"></span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información del odontólogo -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Odontólogo Asignado</h5>
+            </div>
+            <div class="card-body">
+              <p><strong>Nombre:</strong> <span id="odontologo-nombre"></span></p>
+            </div>
+          </div>
+
+          <!-- Motivo de la consulta -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Motivo de la Consulta</h5>
+            </div>
+            <div class="card-body">
+              <p id="motivo-consulta"></p>
+            </div>
+          </div>
+
+          <!-- Odontodiagrama -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Odontodiagrama</h5>
+            </div>
+            <div class="card-body">
+              <div id="odontodiagrama-container">
+                <div class="mb-4">
+                  <h6 class="mb-2">Leyenda:</h6>
+                  <div class="d-flex gap-3">
+                    <div class="d-flex align-items-center">
+                      <div class="rounded-circle border p-2 bg-white me-2"></div>
+                      <span>No revisado</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="rounded-circle border p-2 bg-primary me-2"></div>
+                      <span>Buen estado</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="rounded-circle border p-2 bg-danger me-2"></div>
+                      <span>Mal estado/Patología</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-2" class="sector-container border p-3 rounded">
+                      <h6>Sector 2: Superior Izquierdo</h6>
+                      <div class="dientes-container" data-sector="2"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-1" class="sector-container border p-3 rounded">
+                      <h6>Sector 1: Superior Derecho</h6>
+                      <div class="dientes-container" data-sector="1"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-3" class="sector-container border p-3 rounded">
+                      <h6>Sector 3: Inferior Izquierdo</h6>
+                      <div class="dientes-container" data-sector="3"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-4" class="sector-container border p-3 rounded">
+                      <h6>Sector 4: Inferior Derecho</h6>
+                      <div class="dientes-container" data-sector="4"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/ver-consulta.js"></script>
+</body>
+</html>

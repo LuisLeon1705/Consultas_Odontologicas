@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva Consulta Odontológica - Sistema Odontológico</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/odontodiagrama.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-primary sidebar">
+        <div class="position-sticky">
+          <h2 class="text-white p-3">OTRASS</h2>
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/">
+                <i class="bi bi-house-door me-2"></i>
+                Inicio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/personal">
+                <i class="bi bi-people me-2"></i>
+                Gestión de Personal
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/laboratorio">
+                <i class="bi bi-flask me-2"></i>
+                Laboratorio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/compras">
+                <i class="bi bi-cart me-2"></i>
+                Compras
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white fw-bold" href="/consultas-odontologicas">
+                <i class="bi bi-emoji-smile me-2"></i>
+                Consultas Odontológicas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/consultas-medicas">
+                <i class="bi bi-heart-pulse me-2"></i>
+                Consultas Médicas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/administracion">
+                <i class="bi bi-file-text me-2"></i>
+                Administración
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/hospitalizacion">
+                <i class="bi bi-hospital me-2"></i>
+                Hospitalización
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/mantenimiento">
+                <i class="bi bi-tools me-2"></i>
+                Mantenimiento
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="/citas">
+                <i class="bi bi-calendar me-2"></i>
+                Gestión de Citas
+              </a>
+            </li>
+          </ul>
+          <div class="position-absolute bottom-0 mb-3">
+            <a class="nav-link text-white" href="/ayuda">
+              <i class="bi bi-question-circle me-2"></i>
+              Ayuda
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        <h1 class="mb-4">Nueva Consulta Odontológica</h1>
+
+        <form id="consultation-form" class="needs-validation" novalidate>
+          <!-- Patient information card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Información del Paciente</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                  </span>
+                  <input type="text" id="patient-search" class="form-control" placeholder="Buscar por nombre, apellido o cédula...">
+                  <button type="button" id="search-patient-btn" class="btn btn-primary">Buscar</button>
+                </div>
+              </div>
+
+              <div id="search-results" class="d-none">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cédula</th>
+                        <th>Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody id="search-results-body">
+                      <!-- Search results will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div id="no-patients-found" class="alert alert-info d-none">
+                <p>No se encontraron pacientes con esa búsqueda.</p>
+                <a href="/pacientes/registrar" class="btn btn-primary mt-2">Registrar Nuevo Paciente</a>
+              </div>
+
+              <div id="selected-patient" class="alert alert-success d-none">
+                <h6>Paciente seleccionado:</h6>
+                <p id="patient-name"></p>
+                <p id="patient-cedula"></p>
+                <input type="hidden" id="paciente_id" name="paciente_id">
+              </div>
+            </div>
+          </div>
+
+          <!-- Odontólogo card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Odontólogo Asignado</h5>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="odontologo-select" class="form-label">Seleccionar Odontólogo</label>
+                <select class="form-select" id="odontologo-select" name="odontologo_id" required>
+                  <option value="" selected disabled>Seleccionar odontólogo</option>
+                  <!-- Los odontólogos se cargarán dinámicamente -->
+                </select>
+                <div class="invalid-feedback">
+                  Por favor seleccione un odontólogo.
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#nuevoOdontologoModal">
+                  <i class="bi bi-plus-circle me-2"></i>Registrar Nuevo Odontólogo
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Consultation reason card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Motivo de la Consulta</h5>
+            </div>
+            <div class="card-body">
+              <textarea id="motivo" name="motivo" class="form-control" rows="4" placeholder="Describa el motivo de la consulta" required></textarea>
+              <div class="invalid-feedback">
+                Por favor ingrese el motivo de la consulta.
+              </div>
+            </div>
+          </div>
+
+          <!-- Odontodiagrama card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title">Odontodiagrama</h5>
+            </div>
+            <div class="card-body">
+              <div id="odontodiagrama-container">
+                <!-- Odontodiagrama will be loaded here via JavaScript -->
+                <div class="mb-4">
+                  <h6 class="mb-2">Seleccionar estado:</h6>
+                  <div class="d-flex gap-3">
+                    <button type="button" class="estado-btn rounded-circle border p-3" data-value="0" title="No revisado"></button>
+                    <button type="button" class="estado-btn rounded-circle border p-3 bg-primary" data-value="1" title="Buen estado"></button>
+                    <button type="button" class="estado-btn rounded-circle border p-3 bg-danger" data-value="2" title="Mal estado"></button>
+                  </div>
+                  <div class="mt-2 text-muted small">
+                    <span class="d-inline-block border bg-white me-1" style="width: 12px; height: 12px;"></span> No revisado
+                    <span class="d-inline-block bg-primary ms-3 me-1" style="width: 12px; height: 12px;"></span> Buen estado
+                    <span class="d-inline-block bg-danger ms-3 me-1" style="width: 12px; height: 12px;"></span> Mal estado/Patología
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-2" class="sector-container border p-3 rounded">
+                      <h6>Sector 2: Superior Izquierdo</h6>
+                      <div class="dientes-container" data-sector="2"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-1" class="sector-container border p-3 rounded">
+                      <h6>Sector 1: Superior Derecho</h6>
+                      <div class="dientes-container" data-sector="1"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-3" class="sector-container border p-3 rounded">
+                      <h6>Sector 3: Inferior Izquierdo</h6>
+                      <div class="dientes-container" data-sector="3"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div id="sector-4" class="sector-container border p-3 rounded">
+                      <h6>Sector 4: Inferior Derecho</h6>
+                      <div class="dientes-container" data-sector="4"></div>
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" id="odontodiagrama" name="odontodiagrama">
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="/consultas-odontologicas" class="btn btn-outline-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Guardar Consulta</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal para registrar nuevo odontólogo -->
+  <div class="modal fade" id="nuevoOdontologoModal" tabindex="-1" aria-labelledby="nuevoOdontologoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="nuevoOdontologoModalLabel">Registrar Nuevo Odontólogo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="odontologo-form" class="needs-validation" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="nombre-odontologo" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre-odontologo" name="nombre" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese el nombre.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="apellido-odontologo" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="apellido-odontologo" name="apellido" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese el apellido.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="cedula-odontologo" class="form-label">Cédula</label>
+                <div class="input-group">
+                  <select class="form-select" id="tipo-cedula-odontologo" name="tipo_cedula" style="max-width: 80px;">
+                    <option value="V">V</option>
+                    <option value="E">E</option>
+                  </select>
+                  <input type="number" class="form-control" id="cedula-odontologo" name="cedula" required>
+                </div>
+                <div class="invalid-feedback">
+                  Por favor ingrese la cédula.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="cargo-odontologo" class="form-label">cargo</label>
+                <input type="text" class="form-control" id="cargo-odontologo" name="cargo">
+              </div>
+              <div class="col-md-6">
+                <label for="email-odontologo" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email-odontologo" name="email" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese un email válido.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="telefono-odontologo" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono-odontologo" name="telefono" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese el teléfono.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="fecha-nacimiento-odontologo" class="form-label">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" id="fecha-nacimiento-odontologo" name="fecha_nacimiento" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese la fecha de nacimiento.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="fecha-contratacion-odontologo" class="form-label">Fecha de Contratación</label>
+                <input type="date" class="form-control" id="fecha-contratacion-odontologo" name="fecha_contratacion" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese la fecha de contratación.
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="direccion-odontologo" class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="direccion-odontologo" name="direccion" required>
+                <div class="invalid-feedback">
+                  Por favor ingrese la dirección.
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="guardar-odontologo-btn">Guardar Odontólogo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/odontodiagrama.js"></script>
+  <script src="/js/nueva-consulta.js"></script>
+</body>
+</html>

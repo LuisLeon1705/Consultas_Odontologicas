@@ -1,0 +1,84 @@
+.sector-container {
+  background-color: #f8f9fa;
+}
+
+.dientes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+}
+
+.diente {
+  position: relative;
+  width: 60px;
+  height: 80px;
+  text-align: center;
+}
+
+.diente-numero {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.diente-svg {
+  width: 60px;
+  height: 60px;
+}
+
+.diente-svg circle,
+.diente-svg path {
+  stroke: #333;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: fill 0.2s;
+}
+
+.diente-svg .segmento-0 {
+  fill: white;
+}
+
+.diente-svg .segmento-1 {
+  fill: #007bff;
+}
+
+.diente-svg .segmento-2 {
+  fill: #dc3545;
+}
+
+.diente-svg .segmento:hover {
+  opacity: 0.8;
+}
+
+.estado-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #dee2e6;
+  cursor: pointer;
+}
+
+.estado-btn.active {
+  border: 2px solid #333;
+}
+
+.btn-agregar-diente {
+  font-size: 12px;
+  padding: 2px 5px;
+}
+
+.btn-eliminar-diente {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 16px;
+  height: 16px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
