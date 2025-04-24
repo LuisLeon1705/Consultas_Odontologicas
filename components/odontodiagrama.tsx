@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { wrap } from "module";
 import { useEffect, useState } from "react";
 
 // Tipados para los datos
@@ -112,33 +111,66 @@ export function Odontodiagrama({
     const rExt = 30;
     switch (segmento) {
       case 1:
-        return `M ${cx} ${cy} m -${rInner},0 a ${rInner},${rInner} 0 1,0 ${
-          rInner * 2
-        },0 a ${rInner},${rInner} 0 1,0 -${rInner * 2},0`;
+        return `M ${cx} ${cy}
+        m -${rInner}, 0
+        a ${rInner},${rInner} 0 1,0 ${rInner * 2},0
+        a ${rInner},${rInner} 0 1,0 -${rInner * 2},0 Z`;
       case 2:
-        return `M ${cx} ${cy - rInner} A ${rInner} ${rInner} 0 0 1 ${
-          cx + rInner
-        } ${cy} L ${cx + rOuter} ${cy} A ${rOuter} ${rOuter} 0 0 0 ${cx} ${
-          cy - rOuter
-        } Z`;
+        return `M ${cx + rInner * Math.cos(Math.PI / 4)} ${
+          cy - rInner * Math.sin(Math.PI / 4)
+        } 
+        A ${rInner} ${rInner} 0 0 1 ${cx + rInner * Math.cos(Math.PI / 4)} ${
+          cy - rInner * Math.sin(-Math.PI / 4)
+        } 
+        L ${cx + rOuter * Math.cos(-Math.PI / 4)} ${
+          cy - rOuter * Math.sin(-Math.PI / 4)
+        } 
+        A ${rOuter} ${rOuter} 0 0 0 ${cx + rOuter * Math.cos(Math.PI / 4)} ${
+          cy - rOuter * Math.sin(Math.PI / 4)
+        } 
+        Z`;
       case 3:
-        return `M ${cx + rInner} ${cy} A ${rInner} ${rInner} 0 0 1 ${cx} ${
-          cy + rInner
-        } L ${cx} ${cy + rOuter} A ${rOuter} ${rOuter} 0 0 0 ${
-          cx + rOuter
-        } ${cy} Z`;
+        return `M ${cx + rInner * Math.cos(-Math.PI / 4)} ${
+          cy - rInner * Math.sin(-Math.PI / 4)
+        }
+        A ${rInner} ${rInner} 0 0 1 ${
+          cx + rInner * Math.cos((-3 * Math.PI) / 4)
+        } ${cy - rInner * Math.sin((-3 * Math.PI) / 4)}
+        L ${cx + rOuter * Math.cos((-3 * Math.PI) / 4)} ${
+          cy - rOuter * Math.sin((-3 * Math.PI) / 4)
+        } 
+        A ${rOuter} ${rOuter} 0 0 0 ${cx + rOuter * Math.cos(-Math.PI / 4)} ${
+          cy - rOuter * Math.sin(-Math.PI / 4)
+        } 
+        Z`;
       case 4:
-        return `M ${cx} ${cy + rInner} A ${rInner} ${rInner} 0 0 1 ${
-          cx - rInner
-        } ${cy} L ${cx - rOuter} ${cy} A ${rOuter} ${rOuter} 0 0 0 ${cx} ${
-          cy + rOuter
-        } Z`;
+        return `M ${cx + rInner * Math.cos((-3 * Math.PI) / 4)} ${
+          cy - rInner * Math.sin((-3 * Math.PI) / 4)
+        }
+          A ${rInner} ${rInner} 0 0 1 ${
+          cx - rInner * Math.cos((1 * Math.PI) / 4)
+        } ${cy - rInner * Math.sin((1 * Math.PI) / 4)}
+          L ${cx - rOuter * Math.cos((1 * Math.PI) / 4)} ${
+          cy - rOuter * Math.sin((1 * Math.PI) / 4)
+        }
+          A ${rOuter} ${rOuter} 0 0 0 ${
+          cx + rOuter * Math.cos((-3 * Math.PI) / 4)
+        } ${cy - rOuter * Math.sin((-3 * Math.PI) / 4)} 
+          Z`;
       case 5:
-        return `M ${cx - rInner} ${cy} A ${rInner} ${rInner} 0 0 1 ${cx} ${
-          cy - rInner
-        } L ${cx} ${cy - rOuter} A ${rOuter} ${rOuter} 0 0 0 ${
-          cx - rOuter
-        } ${cy} Z`;
+        return `M ${cx - rInner * Math.cos((1 * Math.PI) / 4)} ${
+          cy - rInner * Math.sin((1 * Math.PI) / 4)
+        }
+          A ${rInner} ${rInner} 0 0 1 ${
+          cx - rInner * Math.cos((3 * Math.PI) / 4)
+        } ${cy - rInner * Math.sin((3 * Math.PI) / 4)}
+          L ${cx - rOuter * Math.cos((3 * Math.PI) / 4)} ${
+          cy - rOuter * Math.sin((3 * Math.PI) / 4)
+        }
+          A ${rOuter} ${rOuter} 0 0 0 ${
+          cx - rOuter * Math.cos((1 * Math.PI) / 4)
+        } ${cy - rOuter * Math.sin((1 * Math.PI) / 4)} 
+          Z`;
       case 6:
         return `M ${cx} ${cy - rOuter} A ${rOuter} ${rOuter} 0 0 1 ${
           cx + rOuter
@@ -244,31 +276,32 @@ export function Odontodiagrama({
   // Render de un sector
   const renderSector = (sector: number, data: SectorData) => {
     // Determinar si es sector izquierdo para invertir orden de dientes
-    const isLeftSector = [2, 4, 6, 8].includes(sector);
+    const isLeftSector = [1, 4, 5, 8].includes(sector);
     const dientes = data.dientes;
     const total = data.dientes.length;
 
     let title = `Sector ${sector}`;
-    if (sector === 1) title += " Superior Derecho";
-    if (sector === 2) title += " Superior Izquierdo";
-    if (sector === 3) title += " Inferior Derecho";
-    if (sector === 4) title += " Inferior Izquierdo";
-    if (sector === 5) title += " Interno Sup Derecho";
-    if (sector === 6) title += " Interno Sup Izquierdo";
-    if (sector === 7) title += " Interno Inf Izquierdo";
-    if (sector === 8) title += " Interno Inf Derecho";
+    if (sector === 1) title += " - Permanente Superior Derecho";
+    if (sector === 2) title += " - Permanente Superior Izquierdo";
+    if (sector === 3) title += " - Permanente Inferior Izquierdo";
+    if (sector === 4) title += " - Permanente Inferior Derecho";
+    if (sector === 5) title += " - Temporal Superior Derecho";
+    if (sector === 6) title += " - Temporal Superior Izquierdo";
+    if (sector === 7) title += " - Temporal Inferior Izquierdo";
+    if (sector === 8) title += " - Temporal Inferior Derecho";
 
     return (
       <div className="border p-4 rounded-md" key={sector}>
         <div className="flex justify-between items-center mb-2">
-          <h3 className="font-medium">{title}</h3>
+          <h3 className="font-medium mb-7">{title}</h3>
           {!readOnly && (
             <Button
               size="sm"
               variant="outline"
+              className="h-8 mb-7"
               onClick={() => agregarDiente(sector)}
             >
-              <Plus className="h-4 w-4 mr-1" /> Agregar Diente
+              <Plus className="h-1 w-4 mr-1" /> Agregar Diente
             </Button>
           )}
         </div>
@@ -293,20 +326,28 @@ export function Odontodiagrama({
   return (
     <div>
       {!readOnly && (
-        <div className="mb-4">
-          <h3 className="font-medium mb-2">Seleccionar estado:</h3>
+        <div className="mb-5">
+          <h3 className="font-medium mb-4">Seleccionar estado:</h3>
 
           <div className="flex space-x-4">
             {[
               { v: 0, title: "Sin revisar", bg: "bg-white" },
               { v: 1, title: "Caries", bg: "bg-red-500" },
-              { v: 2, title: "Restauracion", bg: "bg-blue-500" },
-              { v: 3, title: "Restauracion Defectuosa", bg: "bg-blue-500" },
+              { v: 2, title: "Restauración", bg: "bg-blue-500" },
+              { v: 3, title: "Restauración Defectuosa", bg: "bg-blue-500" },
               { v: 4, title: "Ausente", bg: "bg-black" },
               { v: 5, title: "Sano", bg: "bg-green-500" },
-              { v: 6, title: "Extraer Diente", bg: "bg-orange-500" },
-              { v: 7, title: "Trat. Endodontico ind.", bg: "bg-purple-500" },
-              { v: 8, title: "Trat. Endodontico real", bg: "bg-yellow-300" },
+              { v: 6, title: "Diente a extraer", bg: "bg-orange-500" },
+              {
+                v: 7,
+                title: "Tratamiento Endodóntico Indicado",
+                bg: "bg-purple-500",
+              },
+              {
+                v: 8,
+                title: "Tratamiento Endodóntico Realizado",
+                bg: "bg-yellow-300",
+              },
             ].map(({ v, title, bg }) => (
               <div key={v} className="flex flex-col items-center w-20">
                 <button
@@ -327,10 +368,10 @@ export function Odontodiagrama({
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {renderSector(2, sectores[2])}
         {renderSector(1, sectores[1])}
-        {renderSector(6, sectores[6])}
+        {renderSector(2, sectores[2])}
         {renderSector(5, sectores[5])}
+        {renderSector(6, sectores[6])}
         {renderSector(8, sectores[8])}
         {renderSector(7, sectores[7])}
         {renderSector(4, sectores[4])}

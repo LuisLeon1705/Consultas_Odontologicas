@@ -1,12 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import Laboratorios from "@/components/Laboratorios"
 import { Odontodiagrama } from "@/components/odontodiagrama"
-import { eliminarConsulta } from "@/lib/actions"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,8 +14,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { eliminarConsulta } from "@/lib/actions"
 import { AlertTriangle } from "lucide-react"
+import Link from "next/link"
+import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function VerConsulta() {
   const params = useParams()
@@ -230,6 +231,19 @@ export default function VerConsulta() {
           </CardContent>
         </Card>
       )}
+
+      {/* Laboratorios */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Laboratorios</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Laboratorios
+            mode="view"
+            initialData={consulta?.solicitudes}
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }

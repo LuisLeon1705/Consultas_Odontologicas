@@ -1,97 +1,109 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertTriangle, Plus } from "lucide-react"
-import { useEffect, useState } from "react"
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AlertTriangle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface Odontologo {
-  id: number
-  nombre: string
-  apellido: string
+  id: number;
+  nombre: string;
+  apellido: string;
 }
 
 interface OdontologoSelectorProps {
-  value: number | null
-  onChange: (value: number) => void
+  value: number | null;
+  onChange: (value: number) => void;
 }
 
-export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps) {
-  const [odontologos, setOdontologos] = useState<Odontologo[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [open, setOpen] = useState(false)
-  const [usingMemory, setUsingMemory] = useState(false)
+export function OdontologoSelector({
+  value,
+  onChange,
+}: OdontologoSelectorProps) {
+  const [odontologos, setOdontologos] = useState<Odontologo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [usingMemory, setUsingMemory] = useState(false);
 
   // Formulario para nuevo odontólogo
-  const [nombre, setNombre] = useState("")
-  const [apellido, setApellido] = useState("")
-  const [tipoCedula, setTipoCedula] = useState("V")
-  const [cedula, setCedula] = useState("")
-  const [cargo, setEspecialidad] = useState("")
-  const [email, setEmail] = useState("")
-  const [telefono, setTelefono] = useState("")
-  const [fechaNacimiento, setFechaNacimiento] = useState("")
-  const [fechaContratacion, setFechaContratacion] = useState("")
-  const [direccion, setDireccion] = useState("")
-  const [submitting, setSubmitting] = useState(false)
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [tipoCedula, setTipoCedula] = useState("V");
+  const [cedula, setCedula] = useState("");
+  const [cargo, setEspecialidad] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [fechaNacimiento, setFechaNacimiento] = useState("");
+  const [fechaContratacion, setFechaContratacion] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   // Verificar el estado de la base de datos
   useEffect(() => {
     const checkDbStatus = async () => {
       try {
-        const response = await fetch("/api/db-status")
-        const data = await response.json()
-        setUsingMemory(data.usingMemory)
+        const response = await fetch("/api/db-status");
+        const data = await response.json();
+        setUsingMemory(data.usingMemory);
 
         if (data.usingMemory) {
-          console.warn("Usando datos en memoria en lugar de base de datos")
+          console.warn("Usando datos en memoria en lugar de base de datos");
         }
       } catch (error) {
-        console.error("Error al verificar el estado de la base de datos:", error)
-        setUsingMemory(true)
+        console.error(
+          "Error al verificar el estado de la base de datos:",
+          error
+        );
+        setUsingMemory(true);
       }
-    }
+    };
 
-    checkDbStatus()
-  }, [])
+    checkDbStatus();
+  }, []);
 
   useEffect(() => {
     const fetchOdontologos = async () => {
       try {
-        const response = await fetch("/api/odontologos")
+        const response = await fetch("/api/odontologos");
         if (!response.ok) {
-          throw new Error("No se pudieron cargar los odontólogos")
+          throw new Error("No se pudieron cargar los odontólogos");
         }
-        const data = await response.json()
-        setOdontologos(data)
+        const data = await response.json();
+        setOdontologos(data);
       } catch (error) {
-        console.error("Error al cargar odontólogos:", error)
-        setError("Error al cargar odontólogos. Por favor, inténtelo de nuevo.")
+        console.error("Error al cargar odontólogos:", error);
+        setError("Error al cargar odontólogos. Por favor, inténtelo de nuevo.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchOdontologos()
-  }, [])
+    fetchOdontologos();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (
       !nombre ||
@@ -103,11 +115,11 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
       !fechaContratacion ||
       !direccion
     ) {
-      alert("Por favor complete todos los campos obligatorios")
-      return
+      alert("Por favor complete todos los campos obligatorios");
+      return;
     }
 
-    setSubmitting(true)
+    setSubmitting(true);
 
     try {
       const response = await fetch("/api/odontologos", {
@@ -127,52 +139,52 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
           direccion,
           cargo: "Odontólogo",
         }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Error al crear el odontólogo")
+        throw new Error("Error al crear el odontólogo");
       }
 
-      const nuevoOdontologo = await response.json()
+      const nuevoOdontologo = await response.json();
 
       // Actualizar la lista de odontólogos
-      setOdontologos([...odontologos, nuevoOdontologo])
+      setOdontologos([...odontologos, nuevoOdontologo]);
 
       // Seleccionar el nuevo odontólogo
-      onChange(nuevoOdontologo.id)
+      onChange(nuevoOdontologo.id);
 
       // Limpiar el formulario
-      resetForm()
+      resetForm();
 
       // Cerrar el diálogo
-      setOpen(false)
+      setOpen(false);
     } catch (error) {
-      console.error("Error al registrar odontólogo:", error)
-      alert("Error al registrar odontólogo. Por favor, inténtelo de nuevo.")
+      console.error("Error al registrar odontólogo:", error);
+      alert("Error al registrar odontólogo. Por favor, inténtelo de nuevo.");
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   const resetForm = () => {
-    setNombre("")
-    setApellido("")
-    setTipoCedula("V")
-    setCedula("")
-    setEspecialidad("")
-    setEmail("")
-    setTelefono("")
-    setFechaNacimiento("")
-    setFechaContratacion("")
-    setDireccion("")
-  }
+    setNombre("");
+    setApellido("");
+    setTipoCedula("V");
+    setCedula("");
+    setEspecialidad("");
+    setEmail("");
+    setTelefono("");
+    setFechaNacimiento("");
+    setFechaContratacion("");
+    setDireccion("");
+  };
 
   if (loading) {
-    return <div>Cargando odontólogos...</div>
+    return <div>Cargando odontólogos...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>
+    return <div className="text-red-500">{error}</div>;
   }
 
   return (
@@ -182,14 +194,17 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Modo de datos en memoria</AlertTitle>
           <AlertDescription>
-            El sistema está funcionando con datos en memoria debido a problemas de conexión con la base de datos. Los
-            cambios no serán persistentes.
+            El sistema está funcionando con datos en memoria debido a problemas
+            de conexión con la base de datos. Los cambios no serán persistentes.
           </AlertDescription>
         </Alert>
       )}
 
       <div className="flex gap-4">
-        <Select value={value?.toString()} onValueChange={(value) => onChange(Number(value))}>
+        <Select
+          value={value?.toString()}
+          onValueChange={(value) => onChange(Number(value))}
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Seleccionar odontólogo" />
           </SelectTrigger>
@@ -203,12 +218,7 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
         </Select>
 
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline">
-              <Plus className="mr-2 h-4 w-4" />
-              Nuevo Odontólogo
-            </Button>
-          </DialogTrigger>
+          <DialogTrigger asChild></DialogTrigger>
           <DialogContent className="sm:max-w-[600px]">
             <DialogHeader>
               <DialogTitle>Registrar Nuevo Odontólogo</DialogTitle>
@@ -217,11 +227,21 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="nombre">Nombre</Label>
-                  <Input id="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+                  <Input
+                    id="nombre"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="apellido">Apellido</Label>
-                  <Input id="apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} required />
+                  <Input
+                    id="apellido"
+                    value={apellido}
+                    onChange={(e) => setApellido(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="cedula">Cédula</Label>
@@ -255,11 +275,22 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="telefono">Teléfono</Label>
-                  <Input id="telefono" value={telefono} onChange={(e) => setTelefono(e.target.value)} required />
+                  <Input
+                    id="telefono"
+                    value={telefono}
+                    onChange={(e) => setTelefono(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="fecha_nacimiento">Fecha de Nacimiento</Label>
@@ -272,7 +303,9 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="fecha_contratacion">Fecha de Contratación</Label>
+                  <Label htmlFor="fecha_contratacion">
+                    Fecha de Contratación
+                  </Label>
                   <Input
                     id="fecha_contratacion"
                     type="date"
@@ -283,7 +316,12 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
                 </div>
                 <div className="space-y-2 col-span-2">
                   <Label htmlFor="direccion">Dirección</Label>
-                  <Input id="direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)} required />
+                  <Input
+                    id="direccion"
+                    value={direccion}
+                    onChange={(e) => setDireccion(e.target.value)}
+                    required
+                  />
                 </div>
               </div>
               <DialogFooter>
@@ -301,5 +339,5 @@ export function OdontologoSelector({ value, onChange }: OdontologoSelectorProps)
         </Dialog>
       </div>
     </div>
-  )
+  );
 }

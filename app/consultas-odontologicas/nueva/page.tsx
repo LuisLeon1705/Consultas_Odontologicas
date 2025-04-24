@@ -1,7 +1,7 @@
 "use client";
 
-
 import { BuscarPaciente } from "@/components/buscar-paciente";
+import Laboratorios from "@/components/Laboratorios";
 import { Odontodiagrama } from "@/components/odontodiagrama";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { guardarConsulta } from "@/lib/actions";
 import { useState } from "react";
 // Importar el componente OdontologoSelector
 import { OdontologoSelector } from "@/components/odontologo-selector";
+import Link from "next/link";
 
 export default function NuevaConsulta() {
   const [pacienteSeleccionado, setPacienteSeleccionado] = useState<any>(null);
@@ -17,10 +18,10 @@ export default function NuevaConsulta() {
   const [odontologoId, setOdontologoId] = useState<number | null>(null);
   const [odontodiagrama, setOdontodiagrama] = useState({});
   const [motivo, setMotivo] = useState("");
+  const [laboratorios, setLaboratorios] = useState<any[]>([]);
 
   // Modificar la función handleSubmit para incluir el odontólogo seleccionado
-  const handleSubmit = () => {
-
+  const handleSubmit = async () => {
     if (!pacienteSeleccionado) {
       alert("Debe seleccionar un paciente");
       return;
@@ -35,14 +36,33 @@ export default function NuevaConsulta() {
       alert("Debe ingresar el motivo de la consulta");
       return;
     }
+    if (laboratorios.length > 0) {
+      for (const lab of laboratorios) {
+        if (lab.examenes.length === 0) {
+          alert("Debe ingresar al menos un examen");
+          return;
+        }
+      }
+    }
 
-    const formData = new FormData();
-    formData.append("paciente_id", pacienteSeleccionado.id.toString());
-    formData.append("odontologo_id", odontologoId.toString());
-    formData.append("motivo", motivo);
-    formData.append("odontodiagrama", JSON.stringify(odontodiagrama));
+    const formData = {
+      paciente_id: pacienteSeleccionado.id.toString(),
+      odontologo_id: odontologoId.toString(),
+      motivo,
+      odontodiagrama: odontodiagrama,
+      laboratorios: laboratorios,
+    };
 
-    guardarConsulta(formData);
+    try {
+      await guardarConsulta(formData);
+      alert("Consulta guardada exitosamente");
+      window.location.href = "/consultas-odontologicas";
+    } catch (error) {
+      console.log("Error al guardar la consulta:", error);
+      alert(
+        "Error al guardar la consulta. Por favor, inténtelo de nuevo." + error
+      );
+    }
   };
 
   return (
@@ -106,14 +126,29 @@ export default function NuevaConsulta() {
             <Odontodiagrama onChange={setOdontodiagrama} />
           </CardContent>
         </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Laboratorios</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Laboratorios
+              mode="new"
+              onChange={setLaboratorios}
+              initialData={[]}
+            />
+          </CardContent>
+        </Card>
 
         <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline">
-            Cancelar
-          </Button>
+          <Link href={`/consultas-odontologicas`}>
+            <Button type="button" variant="outline" type="button">
+              Cancelar
+            </Button>
+          </Link>
           <Button
             className="bg-[#007bff] hover:bg-[#0056b3]"
             onClick={() => handleSubmit()}
+            type="button"
           >
             Guardar Consulta
           </Button>

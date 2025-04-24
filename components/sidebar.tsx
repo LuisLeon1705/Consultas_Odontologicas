@@ -1,126 +1,111 @@
-import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFlask } from '@fortawesome/free-solid-svg-icons'
-import {
-  Home,
-  Users,
-  ShoppingCart,
-  SmileIcon as Tooth,
-  Stethoscope,
-  FileText,
-  Bed,
-  PenToolIcon as Tool,
-  Calendar,
-  HelpCircle,
-  FlaskRoundIcon as Flask,
-} from "lucide-react";
+"use client";
 
+import logo from "@/components/images/logo.jpg";
+import {
+  faBoxes,
+  faCalendarCheck,
+  faExternalLinkSquareAlt,
+  faFileInvoiceDollar,
+  faHome,
+  faProcedures,
+  faShoppingCart,
+  faStethoscope,
+  faTools,
+  faTooth,
+  faUsers,
+  faVial,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+interface NavItem {
+  id: string;
+  href: string;
+  label: string;
+  icon: any;
+}
+
+/**
+ * Sidebar component that hides items based on user modules.
+ */
 export function Sidebar() {
+  const [modules, setModules] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("user");
+      if (stored) {
+        try {
+          const user = JSON.parse(stored);
+          setModules(user.modulos || []);
+        } catch {
+          setModules([]);
+        }
+      }
+    }
+  }, []);
+
+  const navItems: NavItem[] = [
+    { id: "home", href: "/", label: "Inicio", icon: faHome },
+    { id: "10", href: "/personal", label: "Gestión de Personal", icon: faUsers },
+    { id: "4", href: "/laboratorio", label: "Laboratorio", icon: faVial },
+    { id: "3", href: "/inventario", label: "Inventario", icon: faBoxes },
+    { id: "1", href: "/compras", label: "Compras", icon: faShoppingCart },
+    { id: "6", href: "/consultas-odontologicas", label: "Consultas Odontológicas", icon: faTooth },
+    { id: "7", href: "/consultas-medicas", label: "Consultas Médicas", icon: faStethoscope },
+    { id: "9", href: "/administracion", label: "Administración", icon: faFileInvoiceDollar },
+    { id: "5", href: "/hospitalizacion", label: "Hospitalización", icon: faProcedures },
+    { id: "2", href: "/mantenimiento", label: "Mantenimiento", icon: faTools },
+    { id: "8", href: "/citas", label: "Gestión de Citas", icon: faCalendarCheck },
+  ];
+
+  const filteredItems = navItems.filter(
+    (item) => item.id === "home" || modules.includes(item.id)
+  );
+
   return (
-    <nav className="w-64 bg-[#007bff] text-white p-5 h-screen">
-      <h2 className="text-2xl font-bold mb-6">OTRASS</h2>
+    <nav className="w-64 bg-[#007bff] text-white p-5 h-screen relative">
+      {/* Logo */}
+      <div className="mb-8">
+        <Image
+          src={logo}
+          alt="Grey + Sloan Memorial Hospital"
+          width={150}
+          height={50}
+        />
+      </div>
+
+      {/* Navigation links */}
       <ul className="space-y-4">
-        <li>
-          <Link
-            href="/"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <Home className="mr-2" size={20} />
-            <span>Inicio</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/personal"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <Users className="mr-2" size={20} />
-            <span>Gestión de Personal</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/laboratorio"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <FontAwesomeIcon
-              icon={faFlask}
-              className="mr-2 w-4 h-4"
-            />
-            <span>Laboratorio</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/compras"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <ShoppingCart className="mr-2" size={20} />
-            <span>Compras</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/consultas-odontologicas"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors font-bold"
-          >
-            <Tooth className="mr-2" size={20} />
-            <span>Consultas Odontológicas</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/consultas-medicas"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <Stethoscope className="mr-2" size={20} />
-            <span>Consultas Médicas</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/administracion"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <FileText className="mr-2" size={20} />
-            <span>Administración</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/hospitalizacion"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <Bed className="mr-2" size={20} />
-            <span>Hospitalización</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/mantenimiento"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <Tool className="mr-2" size={20} />
-            <span>Mantenimiento</span>
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/citas"
-            className="flex items-center hover:text-[#d1e7ff] transition-colors"
-          >
-            <Calendar className="mr-2" size={20} />
-            <span>Gestión de Citas</span>
-          </Link>
-        </li>
+        {filteredItems.map((item) => (
+          <li key={item.id} id={item.id}>
+            <Link
+              href={item.href}
+              className="flex items-center hover:text-[#d1e7ff] transition-colors"
+            >
+              <FontAwesomeIcon
+                icon={item.icon}
+                className="mr-2 w-4 h-4"
+              />
+              <span>{item.label}</span>
+            </Link>
+          </li>
+        ))}
       </ul>
+
+      {/* Logout link at bottom */}
       <div className="absolute bottom-5">
         <Link
-          href="/ayuda"
+          href="/logout"
           className="flex items-center hover:text-[#d1e7ff] transition-colors"
         >
-          <HelpCircle className="mr-2" size={20} />
-          <span>Ayuda</span>
+          <FontAwesomeIcon
+            icon={faExternalLinkSquareAlt}
+            className="mr-2 w-4 h-4"
+          />
+          <span>Cerrar Sesión</span>
         </Link>
       </div>
     </nav>

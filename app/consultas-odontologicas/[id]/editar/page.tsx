@@ -1,6 +1,7 @@
 "use client"
 
 
+import Laboratorios from "@/components/Laboratorios"
 import { Odontodiagrama } from "@/components/odontodiagrama"
 import { OdontologoSelector } from "@/components/odontologo-selector"
 import { Button } from "@/components/ui/button"
@@ -21,6 +22,7 @@ export default function EditarConsulta() {
   const [odontologoId, setOdontologoId] = useState<number | null>(null)
   const [odontodiagrama, setOdontodiagrama] = useState<any>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [laboratorios, setLaboratorios] = useState<any>(null)
 
   useEffect(() => {
     const fetchConsulta = async () => {
@@ -63,6 +65,15 @@ export default function EditarConsulta() {
       return
     }
 
+    if (laboratorios.length > 0) {
+      for (const lab of laboratorios) {
+        if (lab.examenes.length === 0) {
+          alert("Debe ingresar al menos un examen");
+          return;
+        }
+      }
+    }
+
     setSubmitting(true)
 
     try {
@@ -70,6 +81,7 @@ export default function EditarConsulta() {
         odontologo_id: odontologoId,
         motivo,
         odontodiagrama,
+        solicitudes: laboratorios,
       })
 
       router.push(`/consultas-odontologicas/${params.id}`)
@@ -130,9 +142,6 @@ export default function EditarConsulta() {
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Editar Consulta #{consulta.id}</h1>
-        <Link href={`/consultas-odontologicas/${consulta.id}`}>
-          <Button type="button" variant="outline">Cancelar</Button>
-        </Link>
       </div>
 
       <form onSubmit={e => e.preventDefault()}>
@@ -197,7 +206,22 @@ export default function EditarConsulta() {
           </Card>
         )}
 
-        <div className="flex justify-end gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Laboratorios</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Laboratorios
+              mode="edit"
+              consultaId={Number(params.id)}
+              tipoConsulta="odontologica"
+              onChange={setLaboratorios}
+              initialData={consulta?.solicitudes}
+            />
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-end gap-4 mt-4">
           <Link href={`/consultas-odontologicas/${consulta.id}`}>
             <Button type="button" variant="outline">
               Cancelar
