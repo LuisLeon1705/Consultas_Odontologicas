@@ -50,9 +50,9 @@ export default function Pacientes() {
   return (
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Gestión de Pacientes</h1>
+        <h1 className="text-3xl font-sans">Gestión de Pacientes</h1>
         <Link href="/pacientes/registrar">
-          <Button className="bg-[#007bff] hover:bg-[#0056b3]">
+          <Button className="bg-[#00489b] hover:bg-[#0056b3]">
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Paciente
           </Button>
@@ -76,7 +76,7 @@ export default function Pacientes() {
                 onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
               />
             </div>
-            <Button className="bg-[#007bff] hover:bg-[#0056b3]" onClick={handleBuscar}>
+            <Button className="bg-[#00489b] hover:bg-[#0056b3]" onClick={handleBuscar}>
               Buscar
             </Button>
           </div>

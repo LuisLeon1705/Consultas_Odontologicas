@@ -4,7 +4,17 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ciudades, estados, municipios } from "./data";
 import { db } from "./db";
+import fs from "fs";
+//import usuario from "../usuario.json";
 
+export async function cargarSidebar() {
+    // Si no hay datos en localStorage, usar los datos del JSON
+    const usuario = await fs.readFileSync(
+      "../usuario.json",
+      "utf-8"
+    );
+    return JSON.parse(usuario);
+}
 // Función para registrar un nuevo paciente
 export async function registrarPaciente(formData: FormData) {
   // Obtener los datos del formulario

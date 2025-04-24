@@ -41,16 +41,21 @@ export default function ConsultasOdontologicas() {
   return (
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Historial de Consultas Odontológicas</h1>
+        <h1 className=" text-5xl mt-5 ml-3 mb-2 font-sans">Gestión de Consultas Odontológicas</h1>
+      </div>
+
+      <hr />
+
+      <div className="flex justify-between items-center mt-5 mb-6">
         <Link href="/consultas-odontologicas/nueva">
-          <Button className="bg-[#007bff] hover:bg-[#0056b3]">
+          <Button className="bg-[#00489b] hover:bg-[#0056b3] mb-5">
             <Plus className="mr-2 h-4 w-4" />
             Nueva Consulta
           </Button>
         </Link>
       </div>
 
-      <Card className="mb-6">
+      <Card className="mb-6 font-sans">
         <CardHeader>
           <CardTitle>Buscar Consultas</CardTitle>
         </CardHeader>
@@ -70,7 +75,7 @@ export default function ConsultasOdontologicas() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="font-sans">
         <CardHeader>
           <CardTitle>Consultas Recientes</CardTitle>
         </CardHeader>

@@ -15,62 +15,11 @@ import { toast } from "@/components/ui/use-toast"
 
 export default function RegistrarPaciente() {
   const router = useRouter()
-  const [estados, setEstados] = useState([])
-  const [ciudades, setCiudades] = useState([])
-  const [municipios, setMunicipios] = useState([])
   const [estadoSeleccionado, setEstadoSeleccionado] = useState(null)
   const [ciudadSeleccionada, setCiudadSeleccionada] = useState(null)
   const [tipoCedula, setTipoCedula] = useState("V")
   const [cedula, setCedula] = useState("")
   const [cedulaError, setCedulaError] = useState("")
-
-  // Cargar estados al montar el componente
-  useEffect(() => {
-    const fetchEstados = async () => {
-      try {
-        const data = await getEstados()
-        setEstados(data)
-      } catch (error) {
-        console.error("Error al cargar estados:", error)
-      }
-    }
-
-    fetchEstados()
-  }, [])
-
-  // Cargar ciudades cuando cambia el estado
-  useEffect(() => {
-    if (estadoSeleccionado) {
-      const fetchCiudades = async () => {
-        try {
-          const data = await getCiudadesPorEstado(Number(estadoSeleccionado))
-          setCiudades(data)
-          setCiudadSeleccionada(null)
-          setMunicipios([])
-        } catch (error) {
-          console.error("Error al cargar ciudades:", error)
-        }
-      }
-
-      fetchCiudades()
-    }
-  }, [estadoSeleccionado])
-
-  // Cargar municipios cuando cambia la ciudad
-  useEffect(() => {
-    if (ciudadSeleccionada) {
-      const fetchMunicipios = async () => {
-        try {
-          const data = await getMunicipiosPorCiudad(Number(ciudadSeleccionada))
-          setMunicipios(data)
-        } catch (error) {
-          console.error("Error al cargar municipios:", error)
-        }
-      }
-
-      fetchMunicipios()
-    }
-  }, [ciudadSeleccionada])
 
   // Validar cédula
   const validarCedula = (valor: string) => {
@@ -125,7 +74,7 @@ export default function RegistrarPaciente() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Registrar Nuevo Paciente</h1>
+      <h1 className="text-3xl font-sans mb-6">Registrar Nuevo Paciente</h1>
 
       <Card>
         <CardHeader>
@@ -195,64 +144,6 @@ export default function RegistrarPaciente() {
                 <Label htmlFor="fecha_nacimiento">Fecha de Nacimiento</Label>
                 <Input id="fecha_nacimiento" name="fecha_nacimiento" type="date" required />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="estado">Estado</Label>
-                <Select name="estado" required onValueChange={(value) => setEstadoSeleccionado(value)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Seleccionar estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {estados.map((estado: any) => (
-                      <SelectItem key={estado.id} value={estado.id.toString()}>
-                        {estado.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="ciudad">Ciudad</Label>
-                <Select
-                  name="ciudad"
-                  required
-                  disabled={!estadoSeleccionado}
-                  onValueChange={(value) => setCiudadSeleccionada(value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue
-                      placeholder={estadoSeleccionado ? "Seleccionar ciudad" : "Seleccione un estado primero"}
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ciudades.map((ciudad: any) => (
-                      <SelectItem key={ciudad.id} value={ciudad.id.toString()}>
-                        {ciudad.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="municipio">Municipio</Label>
-                <Select name="municipio" required disabled={!ciudadSeleccionada}>
-                  <SelectTrigger>
-                    <SelectValue
-                      placeholder={ciudadSeleccionada ? "Seleccionar municipio" : "Seleccione una ciudad primero"}
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {municipios.map((municipio: any) => (
-                      <SelectItem key={municipio.id} value={municipio.id.toString()}>
-                        {municipio.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
               <div className="space-y-2">
                 <Label htmlFor="direccion">Dirección</Label>
                 <Input id="direccion" name="direccion" required />
@@ -273,7 +164,7 @@ export default function RegistrarPaciente() {
               <Button type="button" variant="outline" onClick={() => router.push("/pacientes")}>
                 Cancelar
               </Button>
-              <Button type="submit" className="bg-[#007bff] hover:bg-[#0056b3]">
+              <Button type="submit" className="bg-[#00489b] hover:bg-[#0056b3]">
                 Registrar Paciente
               </Button>
             </div>

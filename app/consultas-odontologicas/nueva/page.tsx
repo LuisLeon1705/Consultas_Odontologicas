@@ -67,9 +67,9 @@ export default function NuevaConsulta() {
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Nueva Consulta Odontológica</h1>
-
-      <form className="space-y-6">
+      <h1 className="text-5xl mt-5 ml-3 mb-8 font-sans">Nueva Consulta Odontológica</h1>
+      <hr />
+      <form className="space-y-6 mt-6">
         <Card>
           <CardHeader>
             <CardTitle>Información del Paciente</CardTitle>
@@ -146,7 +146,7 @@ export default function NuevaConsulta() {
             </Button>
           </Link>
           <Button
-            className="bg-[#007bff] hover:bg-[#0056b3]"
+            className="bg-[#00489b] hover:bg-[#0056b3]"
             onClick={() => handleSubmit()}
             type="button"
           >

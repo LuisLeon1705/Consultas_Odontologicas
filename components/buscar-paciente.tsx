@@ -44,7 +44,7 @@ export function BuscarPaciente({ onSelect }: BuscarPacienteProps) {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
         </div>
-        <Button type="button" onClick={handleSearch} disabled={buscando} className="bg-[#007bff] hover:bg-[#0056b3]">
+        <Button type="button" onClick={handleSearch} disabled={buscando} className="bg-[#00489b] hover:bg-[#0056b3]">
           {buscando ? "Buscando..." : "Buscar"}
         </Button>
       </div>
@@ -82,7 +82,7 @@ export function BuscarPaciente({ onSelect }: BuscarPacienteProps) {
         <div className="text-center p-4 border rounded-md">
           <p>No se encontraron pacientes con esa búsqueda.</p>
           <Link href="/pacientes/registrar">
-            <Button className="mt-2 bg-[#007bff] hover:bg-[#0056b3]">Registrar Nuevo Paciente</Button>
+            <Button className="mt-2 bg-[#00489b] hover:bg-[#0056b3]">Registrar Nuevo Paciente</Button>
           </Link>
         </div>
       ) : null}

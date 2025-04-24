@@ -4,7 +4,7 @@ import { DbStatus } from "@/components/db-status"
 export default function Home() {
   return (
     <div className="container mx-auto py-8">
-      <h1 className="mb-8 text-3xl font-bold">Sistema de Gestión Odontológica</h1>
+      <h1 className="mb-8 text-3xl font-sans">Sistema de Gestión Odontológica</h1>
 
       <div className="grid gap-6 md:grid-cols-2">
         <DbStatus />

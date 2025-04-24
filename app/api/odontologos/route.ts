@@ -4,12 +4,12 @@ import { db } from "@/lib/db"
 // GET para obtener todos los odontólogos
 export async function GET(request: NextRequest) {
   try {
-    const odontologos = await db.getOdontologos()
-    return NextResponse.json(odontologos)
+    const odontologos = await db.getOdontologos();
+    return NextResponse.json(odontologos);
   } catch (error) {
-    console.error("Error al obtener odontólogos:", error)
-    const msg = error instanceof Error ? error.message : String(error)
-    return NextResponse.json({ error: "Error al obtener odontólogos" }, { status: 500 })
+    console.error("Error al obtener odontólogos:", error);
+    const msg = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: "Error al obtener odontólogos" }, { status: 500 });
   }
 }
 

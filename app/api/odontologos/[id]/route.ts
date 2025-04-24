@@ -4,19 +4,19 @@ import { type NextRequest, NextResponse } from "next/server"
 // GET para obtener un odontólogo específico
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const { id } = await params
+    const { id } = params;
 
     // Obtener el odontólogo de la base de datos
-    const odontologo = await db.getOdontologoPorId(Number(id))
+    const odontologo = await db.getOdontologoPorId(Number(id));
 
     if (!odontologo) {
-      return NextResponse.json({ error: "Odontólogo no encontrado" }, { status: 404 })
+      return NextResponse.json({ error: "Odontólogo no encontrado" }, { status: 404 });
     }
 
-    return NextResponse.json(odontologo)
+    return NextResponse.json(odontologo);
   } catch (error) {
-    console.error("Error al obtener odontólogo:", error)
-    return NextResponse.json({ error: "Error al obtener odontólogo" }, { status: 500 })
+    console.error("Error al obtener odontólogo:", error);
+    return NextResponse.json({ error: "Error al obtener odontólogo" }, { status: 500 });
   }
 }
 

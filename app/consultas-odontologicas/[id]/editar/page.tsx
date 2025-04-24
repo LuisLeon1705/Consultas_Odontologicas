@@ -110,7 +110,7 @@ export default function EditarConsulta() {
     return (
       <div className="container mx-auto">
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-          <strong className="font-bold">Error: </strong>
+          <strong className="font-sans">Error: </strong>
           <span className="block sm:inline">{error}</span>
         </div>
       </div>
@@ -121,7 +121,7 @@ export default function EditarConsulta() {
     return (
       <div className="container mx-auto">
         <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
-          <strong className="font-bold">Aviso: </strong>
+          <strong className="font-sans">Aviso: </strong>
           <span className="block sm:inline">No se encontró la consulta solicitada.</span>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function EditarConsulta() {
   return (
     <div className="container mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Editar Consulta #{consulta.id}</h1>
+        <h1 className="text-3xl font-sans">Editar Consulta #{consulta.id}</h1>
       </div>
 
       <form onSubmit={e => e.preventDefault()}>

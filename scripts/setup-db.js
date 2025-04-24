@@ -17,7 +17,7 @@ async function getCredentials() {
   const user = (await question("Usuario (default: root): ")) || "root"
   const password = await question("Contraseña: ")
   const database =
-    (await question("Nombre de la base de datos (default: sistema_odontologico): ")) || "sistema_odontologico"
+    (await question("Nombre de la base de datos (default: sistema_odontologico): ")) || "sistema_gestion_hospitalaria"
 
   rl.close()
 

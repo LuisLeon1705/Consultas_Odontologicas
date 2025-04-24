@@ -320,20 +320,21 @@ class Database {
     try {
       const [rows] = await this._pool.query(`
         SELECT 
-          empleado_id as id, 
-          nombre, 
-          apellido, 
-          cedula,
-          cargo,
-          email, 
-          telefono,
-          fecha_nacimiento,
-          fecha_contratacion,
-          direccion,
-          cargo
-        FROM empleados
-        WHERE cargo = 'Odontólogo'
-        ORDER BY nombre, apellido
+          e.empleado_id as id, 
+          e.nombre, 
+          e.apellido,        
+          e.cedula,
+          e.fecha_nacimiento,
+          e.fecha_contratacion,
+          e.area,
+          e.cargo,
+          e.email, 
+          e.telefono,          
+          e.direccion
+        FROM empleados e
+        INNER JOIN roles r ON e.rol_id = r.rol_id
+        WHERE r.nombre IN ('Odontólogo', 'Odontologo')
+        ORDER BY e.nombre, e.apellido
       `);
       return rows;
     } catch (error) {
@@ -348,24 +349,24 @@ class Database {
     }
 
     try {
-      const [rows] = await this._pool.query(
-        `
+      const [rows] = await this._pool.query(`
         SELECT 
-          empleado_id as id, 
-          nombre, 
-          apellido, 
-          cedula,
-          email, 
-          telefono,
-          fecha_nacimiento,
-          fecha_contratacion,
-          direccion,
-          cargo
-        FROM empleados
-        WHERE empleado_id = ? AND cargo = 'Odontólogo'
-      `,
-        [id]
-      );
+          e.empleado_id as id, 
+          e.nombre, 
+          e.apellido, 
+          e.cedula,
+          e.area,
+          e.cargo,
+          e.email, 
+          e.telefono,
+          e.fecha_nacimiento,
+          e.fecha_contratacion,
+          e.direccion
+        FROM empleados e
+        INNER JOIN roles r ON e.rol_id = r.rol_id
+        WHERE r.nombre IN ('Odontólogo', 'Odontologo') AND e.empleado_id = ?
+      `, [id]
+    );
 
       return rows[0];
     } catch (error) {
@@ -1431,58 +1432,4 @@ class Database {
     }
   }
 }
-
-// Método para probar la conexión a la base de datos
-
-// Exportar una función para obtener la instancia de la base de datos
-// export async function getDatabase() {
-//   return await Database.getInstance()
-// }
-
-// Para compatibilidad con el código existente, exportamos una versión simulada
-// que se reemplazará con la real cuando se inicialice
-// export const db = {
-//   getPacientes: async () => [],
-//   getPacientePorId: async () => null,
-//   getPacientesPorNombre: async () => [],
-//   agregarPaciente: async (p: any) => p,
-//   getConsultas: async () => [],
-//   getConsultaPorId: async () => null,
-//   agregarConsulta: async (c: any) => c,
-//   actualizarConsulta: async () => null,
-//   eliminarConsulta: async () => false,
-//   getOdontologos: async () => [],
-//   getOdontologoPorId: async () => null,
-//   agregarOdontologo: async (o: any) => o,
-//   actualizarOdontologo: async () => null,
-//   eliminarOdontologo: async () => false,
-//   testConnection: async () => ({ connected: false, message: "No inicializado" }),
-//   isUsingMemory: () => true,
-// }
-
-// Inicializar la base de datos real
-// ;(async () => {
-//   const database = await Database.getInstance()
-//   // Reemplazar los métodos simulados con los reales
-//   Object.assign(db, {
-//     getPacientes: async () => await database.getPacientes(),
-//     getPacientePorId: async (id: number) => await database.getPacientePorId(id),
-//     getPacientesPorNombre: async (query: string) => await database.getPacientesPorNombre(query),
-//     agregarPaciente: async (p: any) => await database.agregarPaciente(p),
-//     getConsultas: async () => await database.getConsultas(),
-//     getConsultaPorId: async (id: number) => await database.getConsultaPorId(id),
-//     agregarConsulta: async (c: any) => await database.agregarConsulta(c),
-//     actualizarConsulta: async (id: number, c: any) => await database.actualizarConsulta(id, c),
-//     eliminarConsulta: async (id: number) => await database.eliminarConsulta(id),
-//     getOdontologos: async () => await database.getOdontologos(),
-//     getOdontologoPorId: async (id: number) => await database.getOdontologoPorId(id),
-//     agregarOdontologo: async (o: any) => await database.agregarOdontologo(o),
-//     actualizarOdontologo: async (id: number, o: any) => await database.actualizarOdontologo(id, o),
-//     eliminarOdontologo: async (id: number) => await database.eliminarOdontologo(id),
-//     testConnection: async () => await database.testConnection(),
-//     isUsingMemory: () => database.isUsingMemory(),
-//   })
-// })()
-
-// Exportar una instancia única de la base de datos
 export const db = new Database();
